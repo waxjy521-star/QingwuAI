@@ -1,16 +1,16 @@
 {
-  "name": "qingwu-ai",
-  "version": "1.0.0",
-  "description": "青雾 AI",
+  "name": "qingwu-ai-v4",
+  "version": "4.0.0",
+  "description": "青雾 AI V4.0 - 毛玻璃 AI 聊天系统",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
+  "dependencies": {
+    "express": "^4.21.2",
+    "express-session": "^1.18.1"
+  },
   "engines": {
     "node": ">=18"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
   }
 }
