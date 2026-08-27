@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
+
+    <meta
+        name="theme-color"
+        content="#070b13"
+    >
+
+    <title>青雾 AI</title>
+
+    <link
+        rel="stylesheet"
+        href="/style.css"
+    >
+</head>
+
+<body>
+
+    <!-- =========================
+         背景光晕
+    ========================== -->
+
+    <div class="background-orb orb-one"></div>
+    <div class="background-orb orb-two"></div>
+    <div class="background-orb orb-three"></div>
+
+
+    <!-- =========================
+         登录 / 注册页面
+    ========================== -->
+
+    <section
+        id="authPage"
+        class="auth-page"
+    >
+
+        <div class="auth-card glass">
+
+            <div class="auth-logo">
+                Q
+            </div>
+
+            <h1>
+                青雾 AI
+            </h1>
+
+            <p class="auth-subtitle">
+                你的智能 AI 助手
+            </p>
+
+
+            <!-- 登录 / 注册切换 -->
+
+            <div class="auth-tabs">
+
+                <button
+                    class="auth-tab active"
+                    data-mode="login"
+                    type="button"
+                >
+                    登录
+                </button>
+
+                <button
+                    class="auth-tab"
+                    data-mode="register"
+                    type="button"
+                >
+                    注册
+                </button>
+
+            </div>
+
+
+            <!-- 登录注册表单 -->
+
+            <form id="authForm">
+
+                <div class="form-group">
+
+                    <label>
+                        用户名
+                    </label>
+
+                    <input
+                        id="usernameInput"
+                        type="text"
+                        autocomplete="username"
+                        placeholder="输入用户名"
+                        required
+                    >
+
+                </div>
+
+
+                <div
+                    id="nicknameGroup"
+                    class="form-group hidden"
+                >
+
+                    <label>
+                        昵称
+                    </label>
+
+                    <input
+                        id="nicknameInput"
+                        type="text"
+                        placeholder="输入你的昵称"
+                        maxlength="24"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        密码
+                    </label>
+
+                    <input
+                        id="passwordInput"
+                        type="password"
+                        autocomplete="current-password"
+                        placeholder="至少 6 位"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    id="authSubmit"
+                    class="primary-button"
+                    type="submit"
+                >
+                    登录
+                </button>
+
+            </form>
+
+
+            <div
+                id="authError"
+                class="auth-error"
+            ></div>
+
+
+            <div class="auth-footer">
+                青雾 AI · QingwuAI
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         主程序
+    ========================== -->
+
+    <div
+        id="app"
+        class="app hidden"
+    >
+
+
+        <!-- =========================
+             左侧菜单
+        ========================== -->
+
+        <aside
+            id="sidebar"
+            class="sidebar glass"
+        >
+
+            <!-- 品牌 -->
+
+            <div class="sidebar-brand">
+
+                <div class="brand-logo">
+                    Q
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>
+                        青雾 AI
+                    </strong>
+
+                    <span>
+                        QingwuAI
+                    </span>
+
+                </div>
+
+
+                <button
+                    id="closeSidebar"
+                    class="icon-button mobile-only"
+                    type="button"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- 新建聊天 -->
+
+            <button
+                id="newChatButton"
+                class="new-chat-button"
+                type="button"
+            >
+
+                <span class="new-chat-icon">
+                    ＋
+                </span>
+
+                <span>
+                    新建对话
+                </span>
+
+            </button>
+
+
+            <!-- 聊天列表标题 -->
+
+            <div class="section-title">
+                最近对话
+            </div>
+
+
+            <!-- 聊天列表 -->
+
+            <div
+                id="chatList"
+                class="chat-list"
+            >
+
+            </div>
+
+
+            <!-- 用户区域 -->
+
+            <button
+                id="profileButton"
+                class="user-profile"
+                type="button"
+            >
+
+                <div
+                    id="sidebarAvatar"
+                    class="avatar"
+                >
+                    Q
+                </div>
+
+
+                <div class="user-info">
+
+                    <strong
+                        id="sidebarNickname"
+                    >
+                        用户
+                    </strong>
+
+                    <span
+                        id="sidebarUsername"
+                    >
+                        @user
+                    </span>
+
+                </div>
+
+
+                <span class="profile-arrow">
+                    ›
+                </span>
+
+            </button>
+
+        </aside>
+
+
+
+        <!-- =========================
+             主聊天区域
+        ========================== -->
+
+        <main class="main-area">
+
+
+            <!-- 顶部栏 -->
+
+            <header
+                class="topbar glass"
+            >
+
+                <div class="topbar-left">
+
+                    <button
+                        id="menuButton"
+                        class="icon-button"
+                        type="button"
+                    >
+                        ☰
+                    </button>
+
+
+                    <div class="conversation-title">
+
+                        <strong id="conversationTitle">
+                            新对话
+                        </strong>
+
+                        <span>
+                            青雾 AI
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-right">
+
+                    <div class="online-status">
+
+                        <span class="online-dot"></span>
+
+                        在线
+
+                    </div>
+
+
+                    <button
+                        id="clearChatButton"
+                        class="icon-button"
+                        title="清空聊天"
+                        type="button"
+                    >
+                        ⌫
+                    </button>
+
+
+                    <button
+                        id="moreButton"
+                        class="icon-button"
+                        title="更多"
+                        type="button"
+                    >
+                        ⋯
+                    </button>
+
+                </div>
+
+            </header>
+
+
+
+            <!-- =========================
+                 欢迎页面
+            ========================== -->
+
+            <section
+                id="welcomeScreen"
+                class="welcome-screen"
+            >
+
+                <div class="welcome-icon">
+                    ✦
+                </div>
+
+                <h2>
+                    你好，我是青雾 AI
+                </h2>
+
+                <p>
+                    有什么想法，直接告诉我。
+                </p>
+
+
+                <div class="suggestion-list">
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
+                        <span>⌘</span>
+                        帮我写一段代码
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
+                        <span>?</span>
+                        解释一个复杂概念
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
+                        <span>✦</span>
+                        给我一个创意
+                    </button>
+
+
+                    <button
+                        class="suggestion"
+                        type="button"
+                    >
+                        <span>☷</span>
+                        帮我整理思路
+                    </button>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================
+                 消息区域
+            ========================== -->
+
+            <section
+                id="messages"
+                class="messages"
+            >
+
+            </section>
+
+
+
+            <!-- =========================
+                 输入区域
+            ========================== -->
+
+            <div class="composer-area">
+
+
+                <!-- AI 思考状态 -->
+
+                <div
+                    id="typingIndicator"
+                    class="typing-indicator hidden"
+                >
+
+                    <span class="typing-dots">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                    </span>
+
+                    青雾 AI 正在思考……
+
+                </div>
+
+
+                <!-- 输入框 -->
+
+                <form
+                    id="chatForm"
+                    class="composer glass"
+                >
+
+                    <textarea
+                        id="messageInput"
+                        rows="1"
+                        maxlength="12000"
+                        placeholder="输入你的问题……"
+                    ></textarea>
+
+
+                    <button
+                        id="sendButton"
+                        class="send-button"
+                        type="submit"
+                        title="发送"
+                    >
+                        ↑
+                    </button>
+
+                </form>
+
+
+                <div class="composer-hint">
+                    Enter 发送 · Shift + Enter 换行
+                </div>
+
+                <div class="ai-warning">
+                    AI 可能会出错，请核对重要信息。
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+
+    <!-- =========================
+         用户资料弹窗
+    ========================== -->
+
+    <div
+        id="profileModal"
+        class="modal hidden"
+    >
+
+        <div class="profile-modal glass">
+
+            <button
+                id="closeProfile"
+                class="modal-close"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <div class="profile-header">
+
+                <div
+                    id="modalAvatar"
+                    class="avatar profile-avatar"
+                >
+                    Q
+                </div>
+
+                <h2>
+                    个人资料
+                </h2>
+
+                <p id="modalUsername">
+                    @user
+                </p>
+
+            </div>
+
+
+            <!-- 昵称 -->
+
+            <div class="form-group">
+
+                <label>
+                    昵称
+                </label>
+
+                <input
+                    id="profileNickname"
+                    type="text"
+                    maxlength="24"
+                    placeholder="你的昵称"
+                >
+
+            </div>
+
+
+            <!-- 头像 -->
+
+            <div class="form-group">
+
+                <label>
+                    更换头像
+                </label>
+
+                <input
+                    id="avatarFile"
+                    type="file"
+                    accept="image/*"
+                >
+
+            </div>
+
+
+            <button
+                id="saveProfile"
+                class="primary-button"
+                type="button"
+            >
+                保存资料
+            </button>
+
+
+            <button
+                id="logoutButton"
+                class="danger-button"
+                type="button"
+            >
+                退出登录
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         Toast 提示
+    ========================== -->
+
+    <div
+        id="toast"
+        class="toast"
+    ></div>
+
+
+
+    <!-- =========================
+         JavaScript
+    ========================== -->
+
+    <script src="/app.js"></script>
+
+</body>
+
+</html>
