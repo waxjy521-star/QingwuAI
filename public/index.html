@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta
+    name="theme-color"
+    content="#7c5cff"
+  >
+
+  <title>青雾 AI</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <!-- =========================
+       整个应用
+  ========================== -->
+
+  <div id="app">
+
+    <!-- =========================
+         登录 / 注册页面
+    ========================== -->
+
+    <section id="authPage" class="auth-page">
+
+      <div class="auth-background">
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
+        <div class="aurora aurora-3"></div>
+      </div>
+
+      <div class="auth-card">
+
+        <div class="auth-logo">
+          <div class="logo-orb">青</div>
+        </div>
+
+        <h1>青雾 AI</h1>
+
+        <p class="auth-subtitle">
+          你的私人 AI 对话空间
+        </p>
+
+        <!-- 登录 / 注册切换 -->
+
+        <div class="auth-tabs">
+
+          <button
+            class="auth-tab active"
+            data-mode="login"
+            type="button"
+          >
+            登录
+          </button>
+
+          <button
+            class="auth-tab"
+            data-mode="register"
+            type="button"
+          >
+            注册
+          </button>
+
+        </div>
+
+        <form id="authForm">
+
+          <div class="input-group">
+
+            <label for="usernameInput">
+              用户名
+            </label>
+
+            <input
+              id="usernameInput"
+              type="text"
+              autocomplete="username"
+              placeholder="输入用户名"
+              maxlength="32"
+              required
+            >
+
+          </div>
+
+          <div
+            id="nicknameGroup"
+            class="input-group hidden"
+          >
+
+            <label for="nicknameInput">
+              昵称
+            </label>
+
+            <input
+              id="nicknameInput"
+              type="text"
+              placeholder="给自己取个昵称"
+              maxlength="50"
+            >
+
+          </div>
+
+          <div class="input-group">
+
+            <label for="passwordInput">
+              密码
+            </label>
+
+            <input
+              id="passwordInput"
+              type="password"
+              autocomplete="current-password"
+              placeholder="输入密码"
+              minlength="6"
+              required
+            >
+
+          </div>
+
+          <div
+            id="authError"
+            class="auth-error"
+          ></div>
+
+          <button
+            id="authSubmit"
+            class="primary-button auth-submit"
+            type="submit"
+          >
+            登录
+          </button>
+
+        </form>
+
+        <div class="auth-footer">
+          青雾 AI · 简洁、自由、属于你的 AI
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         主应用
+    ========================== -->
+
+    <section id="mainPage" class="main-page hidden">
+
+      <!-- =========================
+           侧边栏遮罩
+      ========================== -->
+
+      <div
+        id="sidebarOverlay"
+        class="sidebar-overlay"
+      ></div>
+
+
+      <!-- =========================
+           左侧菜单
+      ========================== -->
+
+      <aside
+        id="sidebar"
+        class="sidebar"
+      >
+
+        <div class="sidebar-header">
+
+          <div class="brand">
+
+            <div class="brand-icon">
+              青
+            </div>
+
+            <div class="brand-text">
+              <strong>青雾 AI</strong>
+              <span>AI Assistant</span>
+            </div>
+
+          </div>
+
+          <button
+            id="closeSidebar"
+            class="icon-button"
+            type="button"
+            aria-label="关闭菜单"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <!-- 新对话 -->
+
+        <button
+          id="newChatButton"
+          class="new-chat-button"
+          type="button"
+        >
+
+          <span class="new-chat-icon">
+            ＋
+          </span>
+
+          <span>
+            新对话
+          </span>
+
+        </button>
+
+
+        <!-- 搜索聊天 -->
+
+        <div class="chat-search">
+
+          <span>⌕</span>
+
+          <input
+            id="chatSearchInput"
+            type="search"
+            placeholder="搜索对话..."
+          >
+
+        </div>
+
+
+        <!-- 聊天列表 -->
+
+        <div
+          id="chatList"
+          class="chat-list"
+        ></div>
+
+
+        <!-- 侧边栏底部 -->
+
+        <div class="sidebar-bottom">
+
+          <div class="user-mini">
+
+            <div
+              id="sidebarAvatar"
+              class="avatar"
+            >
+              青
+            </div>
+
+            <div class="user-mini-info">
+
+              <strong id="sidebarNickname">
+                青雾用户
+              </strong>
+
+              <span id="sidebarUsername">
+                @user
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="sidebar-actions">
+
+            <button
+              id="profileButton"
+              type="button"
+              class="sidebar-action"
+            >
+              <span>👤</span>
+              <span>个人资料</span>
+            </button>
+
+            <button
+              id="settingsButton"
+              type="button"
+              class="sidebar-action"
+            >
+              <span>⚙️</span>
+              <span>设置</span>
+            </button>
+
+          </div>
+
+        </div>
+
+      </aside>
+
+
+      <!-- =========================
+           主聊天区域
+      ========================== -->
+
+      <main class="chat-container">
+
+        <!-- 顶部栏 -->
+
+        <header class="topbar">
+
+          <button
+            id="menuButton"
+            class="icon-button mobile-menu-button"
+            type="button"
+            aria-label="打开菜单"
+          >
+            ☰
+          </button>
+
+
+          <div class="conversation-info">
+
+            <div
+              id="conversationTitle"
+              class="conversation-title"
+            >
+              新对话
+            </div>
+
+            <div class="conversation-status">
+              <span class="status-dot"></span>
+              青雾 AI 在线
+            </div>
+
+          </div>
+
+
+          <div class="topbar-actions">
+
+            <button
+              id="moreButton"
+              class="icon-button"
+              type="button"
+              aria-label="更多"
+            >
+              ⋯
+            </button>
+
+
+            <div
+              id="moreMenu"
+              class="more-menu hidden"
+            >
+
+              <button
+                id="copyLastMessage"
+                type="button"
+              >
+                📋 复制最后一条回复
+              </button>
+
+              <button
+                id="readLastMessage"
+                type="button"
+              >
+                🔊 朗读最后一条回复
+              </button>
+
+              <button
+                id="downloadChat"
+                type="button"
+              >
+                💾 导出聊天
+              </button>
+
+            </div>
+
+          </div>
+
+        </header>
+
+
+        <!-- =========================
+             消息区域
+        ========================== -->
+
+        <div
+          id="messages"
+          class="messages"
+        >
+
+          <!-- 欢迎页面 -->
+
+          <div
+            id="welcomeScreen"
+            class="welcome-screen"
+          >
+
+            <div class="welcome-orb">
+              <span>青</span>
+            </div>
+
+            <h2>
+              你好，我是青雾 AI
+            </h2>
+
+            <p>
+              有什么想法，直接告诉我。
+            </p>
+
+
+            <!-- 快速建议 -->
+
+            <div class="suggestions">
+
+              <button
+                class="suggestion"
+                type="button"
+                data-prompt="帮我写一个创意故事"
+              >
+                <span>✦</span>
+                <div>
+                  <strong>创意写作</strong>
+                  <small>帮我写一个创意故事</small>
+                </div>
+              </button>
+
+
+              <button
+                class="suggestion"
+                type="button"
+                data-prompt="帮我制定一个学习计划"
+              >
+                <span>◈</span>
+                <div>
+                  <strong>制定计划</strong>
+                  <small>帮我制定一个学习计划</small>
+                </div>
+              </button>
+
+
+              <button
+                class="suggestion"
+                type="button"
+                data-prompt="请给我讲一个有趣的冷知识"
+              >
+                <span>✧</span>
+                <div>
+                  <strong>探索知识</strong>
+                  <small>告诉我一个有趣的冷知识</small>
+                </div>
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <!-- 聊天消息 -->
+
+          <div
+            id="chatArea"
+            class="chat-area"
+          ></div>
+
+
+          <!-- AI 正在输入 -->
+
+          <div
+            id="typingIndicator"
+            class="typing-indicator hidden"
+          >
+
+            <div class="message-avatar ai-avatar">
+              青
+            </div>
+
+            <div class="typing-bubble">
+
+              <span></span>
+              <span></span>
+              <span></span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =========================
+             上传预览
+        ========================== -->
+
+        <div
+          id="uploadPreview"
+          class="upload-preview hidden"
+        ></div>
+
+
+        <!-- =========================
+             语音状态
+        ========================== -->
+
+        <div
+          id="voiceStatus"
+          class="voice-status hidden"
+        >
+
+          <span class="voice-pulse"></span>
+
+          <span id="voiceStatusText">
+            正在聆听...
+          </span>
+
+          <button
+            id="stopVoiceButton"
+            type="button"
+          >
+            停止
+          </button>
+
+        </div>
+
+
+        <!-- =========================
+             语音朗读控制
+        ========================== -->
+
+        <div
+          id="speechBar"
+          class="speech-bar hidden"
+        >
+
+          <span>
+            🔊 正在朗读
+          </span>
+
+          <button
+            id="pauseSpeechButton"
+            type="button"
+          >
+            暂停
+          </button>
+
+          <button
+            id="stopSpeechButton"
+            type="button"
+          >
+            停止
+          </button>
+
+        </div>
+
+
+        <!-- =========================
+             输入区域
+        ========================== -->
+
+        <div class="composer-wrapper">
+
+          <form
+            id="chatForm"
+            class="composer"
+          >
+
+            <!-- 文件上传 -->
+
+            <div class="composer-left">
+
+              <button
+                id="fileButton"
+                class="composer-button"
+                type="button"
+                aria-label="上传文件"
+              >
+                ＋
+              </button>
+
+              <button
+                id="imageButton"
+                class="composer-button"
+                type="button"
+                aria-label="上传图片"
+              >
+                🖼
+              </button>
+
+              <button
+                id="voiceButton"
+                class="composer-button"
+                type="button"
+                aria-label="语音输入"
+              >
+                🎙
+              </button>
+
+              <input
+                id="fileInput"
+                type="file"
+                hidden
+              >
+
+              <input
+                id="imageInput"
+                type="file"
+                accept="image/*"
+                hidden
+              >
+
+            </div>
+
+
+            <!-- 输入框 -->
+
+            <textarea
+              id="messageInput"
+              rows="1"
+              maxlength="30000"
+              placeholder="输入消息..."
+              autocomplete="off"
+            ></textarea>
+
+
+            <!-- 发送 -->
+
+            <button
+              id="sendButton"
+              class="send-button"
+              type="submit"
+              aria-label="发送"
+            >
+              ↑
+            </button>
+
+          </form>
+
+          <div class="composer-hint">
+            青雾 AI 可能会犯错，请核实重要信息
+          </div>
+
+        </div>
+
+      </main>
+
+    </section>
+
+
+    <!-- =========================
+         设置弹窗
+    ========================== -->
+
+    <div
+      id="settingsModal"
+      class="modal hidden"
+    >
+
+      <div class="modal-backdrop"></div>
+
+      <div class="modal-card">
+
+        <div class="modal-header">
+
+          <div>
+            <h3>设置</h3>
+            <p>调整你的青雾 AI 体验</p>
+          </div>
+
+          <button
+            id="closeSettings"
+            class="icon-button"
+            type="button"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="settings-body">
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>主题</strong>
+              <span>选择界面主题</span>
+            </div>
+
+            <select id="themeSelect">
+
+              <option value="system">
+                跟随系统
+              </option>
+
+              <option value="light">
+                浅色
+              </option>
+
+              <option value="dark">
+                深色
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>玻璃效果</strong>
+              <span>调整毛玻璃强度</span>
+            </div>
+
+            <input
+              id="glassRange"
+              type="range"
+              min="0"
+              max="100"
+              value="70"
+            >
+
+          </div>
+
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>字体大小</strong>
+              <span>调整聊天文字大小</span>
+            </div>
+
+            <select id="fontSizeSelect">
+
+              <option value="small">
+                小
+              </option>
+
+              <option value="medium" selected>
+                中
+              </option>
+
+              <option value="large">
+                大
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>自动朗读</strong>
+              <span>AI 回复后自动播放语音</span>
+            </div>
+
+            <label class="switch">
+
+              <input
+                id="autoSpeechToggle"
+                type="checkbox"
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>朗读速度</strong>
+              <span>调整语音播放速度</span>
+            </div>
+
+            <input
+              id="speechRate"
+              type="range"
+              min="0.5"
+              max="2"
+              step="0.1"
+              value="1"
+            >
+
+          </div>
+
+
+          <div class="setting-item">
+
+            <div class="setting-label">
+              <strong>动画效果</strong>
+              <span>开启界面动画</span>
+            </div>
+
+            <label class="switch">
+
+              <input
+                id="animationToggle"
+                type="checkbox"
+                checked
+              >
+
+              <span class="slider"></span>
+
+            </label>
+
+          </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+          <button
+            id="resetSettings"
+            class="secondary-button"
+            type="button"
+          >
+            恢复默认
+          </button>
+
+          <button
+            id="saveSettings"
+            class="primary-button"
+            type="button"
+          >
+            保存设置
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+<!-- =========================
+         个人资料弹窗
+    ========================== -->
+
+    <div
+      id="profileModal"
+      class="modal hidden"
+    >
+
+      <div class="modal-backdrop"></div>
+
+      <div class="modal-card profile-card">
+
+        <div class="modal-header">
+
+          <div>
+            <h3>个人资料</h3>
+            <p>管理你的青雾 AI 账号</p>
+          </div>
+
+          <button
+            id="closeProfile"
+            class="icon-button"
+            type="button"
+          >
+            ×
+          </button>
+
+        </div>
+
+
+        <div class="profile-body">
+
+          <div class="profile-avatar-section">
+
+            <div
+              id="modalAvatar"
+              class="profile-avatar"
+            >
+              青
+            </div>
+
+            <label
+              class="avatar-upload-button"
+              for="avatarFile"
+            >
+              更换头像
+            </label>
+
+            <input
+              id="avatarFile"
+              type="file"
+              accept="image/*"
+              hidden
+            >
+
+          </div>
+
+
+          <div class="input-group">
+
+            <label>
+              用户名
+            </label>
+
+            <input
+              id="modalUsername"
+              type="text"
+              disabled
+            >
+
+          </div>
+
+
+          <div class="input-group">
+
+            <label for="profileNickname">
+              昵称
+            </label>
+
+            <input
+              id="profileNickname"
+              type="text"
+              maxlength="50"
+              placeholder="输入你的昵称"
+            >
+
+          </div>
+
+        </div>
+
+
+        <div class="modal-footer">
+
+          <button
+            id="logoutButton"
+            class="danger-button"
+            type="button"
+          >
+            退出登录
+          </button>
+
+          <button
+            id="saveProfile"
+            class="primary-button"
+            type="button"
+          >
+            保存资料
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         Toast 提示
+    ========================== -->
+
+    <div
+      id="toast"
+      class="toast hidden"
+    >
+      <span class="toast-icon">✓</span>
+      <span class="toast-text">操作成功</span>
+    </div>
+
+
+  </div>
+
+
+  <!-- =========================
+       JavaScript
+  ========================== -->
+
+  <script src="/app.js"></script>
+
+</body>
+</html>
